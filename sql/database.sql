@@ -186,7 +186,7 @@ insert into public.desks (nombre, zona, pos_x, pos_y) values
     ('D12',  'Área común',  600, 220),
     ('D13',  'Área común',  700, 220),
     ('D14',  'Área común',  800, 220),
-    ('OP',   'Oficina coM', 450, 360),
+    ('OP',   'Oficina CoM', 450, 360),
     ('P1',   'Sala grande', 380, 500),
     ('P2',   'Sala grande', 480, 500),
     ('RMU1', 'Sala RMU',    200, 640),
