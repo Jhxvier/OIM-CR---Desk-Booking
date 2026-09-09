@@ -11,6 +11,8 @@ Sistema interno de reserva de escritorios de oficina para la **Organización Int
 - **Login por código OTP**: el usuario ingresa su email institucional y recibe un código de acceso por correo.
 - **Mapa de escritorios**: reservas del día organizadas por bloques de zona. Un escritorio disponible se muestra en verde; reservado, en rojo con el nombre de quien lo reservó.
 - **Doble reserva bloqueada**: no se permite reservar un escritorio ya ocupado (vía interfaz + reglas RLS en la base de datos).
+- **Límite de reserva por usuario**: los usuarios regulares solo pueden reservar **1 escritorio por día**. Los administradores no tienen este límite.
+- **Reserva por admin**: el administrador puede reservar escritorios **a nombre de cualquier usuario** desde el panel de administración.
 - **Mis reservas**: el usuario ve y cancela sus propias reservas.
 - **Panel admin**: gestión de reservas, escritorios (agregar/editar/eliminar) y usuarios (permitir o quitar acceso con rol `user` o `admin`).
 - **Sesión segura**: los usuarios normales cierran sesión automáticamente tras 5 minutos de inactividad (aviso antes de cerrar). Los administradores no tienen límite.

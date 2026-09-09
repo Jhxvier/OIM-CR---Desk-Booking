@@ -120,6 +120,14 @@
   }
 
   async function reservar(desk) {
+    if (profile.rol !== 'admin') {
+      const yaTiene = reservas.some((r) => r.user_email === user.email);
+      if (yaTiene) {
+        panelAlert('danger', 'Ya tienes una reserva para esta fecha. Cancela la existente primero.');
+        return;
+      }
+    }
+
     const btn = document.getElementById('btn-reserve');
     if (btn) { btn.disabled = true; btn.textContent = 'RESERVANDO…'; }
 

@@ -10,11 +10,13 @@
   const deskModal = $('desk-modal');
   const userModal = $('user-modal');
   const confirmModal = $('confirm-modal');
+  const reservarModal = $('reservar-modal');
 
   const zonaList = $('zona-list');
   let deskModalInstance = null;
   let userModalInstance = null;
   let confirmModalInstance = null;
+  let reservarModalInstance = null;
 
   let allDesks = [];
   let allUsers = [];
@@ -95,6 +97,10 @@
     deskModalInstance = new bootstrap.Modal(deskModal);
     userModalInstance = new bootstrap.Modal(userModal);
     confirmModalInstance = new bootstrap.Modal(confirmModal);
+    reservarModalInstance = new bootstrap.Modal(reservarModal);
+
+    $('btn-admin-reservar').addEventListener('click', openReservarModal);
+    $('btn-confirm-reservar').addEventListener('click', confirmReserva);
 
     await loadDesks();
     await loadUsers();
@@ -410,6 +416,95 @@
     showToast('Usuario añadido.');
     await loadUsers();
     renderUsers();
+  }
+
+  function openReservarModal() {
+    const userSelect = $('reservar-user');
+    const deskSelect = $('reservar-desk');
+    const msg = $('reservar-msg');
+
+    userSelect.innerHTML = '<option value="">Seleccionar usuario...</option>';
+    deskSelect.innerHTML = '<option value="">Seleccionar escritorio...</option>';
+    msg.className = 'alert d-none mb-0';
+
+    allUsers.filter((u) => u.activo).forEach((u) => {
+      const opt = document.createElement('option');
+      opt.value = u.email;
+      opt.textContent = `${u.nombre} (${u.email})`;
+      userSelect.appendChild(opt);
+    });
+
+    const fecha = adminDate.value;
+    const takenDeskIds = new Set();
+    supabaseClient
+      .from('reservas')
+      .select('desk_id')
+      .eq('fecha', fecha)
+      .then(({ data }) => {
+        if (data) data.forEach((r) => takenDeskIds.delete(r.desk_id));
+        allDesks
+          .filter((d) => d.activo && takenDeskIds.has(d.id))
+          .forEach((d) => {
+            const opt = document.createElement('option');
+            opt.value = d.id;
+            opt.textContent = `${d.nombre} (${d.zona})`;
+            deskSelect.appendChild(opt);
+          });
+      });
+
+    reservarModalInstance.show();
+  }
+
+  async function confirmReserva() {
+    const userSelect = $('reservar-user');
+    const deskSelect = $('reservar-desk');
+    const msg = $('reservar-msg');
+    const btn = $('btn-confirm-reservar');
+
+    const email = userSelect.value;
+    const deskId = deskSelect.value;
+
+    if (!email || !deskId) {
+      msg.className = 'alert alert-danger mb-0';
+      msg.textContent = 'Selecciona un usuario y un escritorio.';
+      return;
+    }
+
+    const selectedUser = allUsers.find((u) => u.email === email);
+    if (!selectedUser) {
+      msg.className = 'alert alert-danger mb-0';
+      msg.textContent = 'Usuario no encontrado.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'RESERVANDO…';
+
+    const { data: sessionData } = await supabaseClient.auth.getUser();
+    const userAuthId = sessionData.user.id;
+
+    const { error } = await supabaseClient.from('reservas').insert({
+      fecha: adminDate.value,
+      desk_id: deskId,
+      user_id: userAuthId,
+      user_email: email,
+      user_nombre: selectedUser.nombre
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'RESERVAR';
+
+    if (error) {
+      msg.className = 'alert alert-danger mb-0';
+      msg.textContent = error.code === '23505'
+        ? 'Ese escritorio ya está reservado para esta fecha.'
+        : error.message;
+      return;
+    }
+
+    reservarModalInstance.hide();
+    showToast(`Reserva creada: ${deskSelect.options[deskSelect.selectedIndex].text} para ${selectedUser.nombre}`);
+    await renderReservations();
   }
 
   init();

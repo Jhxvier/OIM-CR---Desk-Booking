@@ -90,6 +90,9 @@
                   style="width: auto"
                 />
                 <span id="admin-date-status" class="text-danger small"></span>
+                <button class="btn btn-success btn-sm ms-auto" id="btn-admin-reservar">
+                  + RESERVAR A NOMBRE DE
+                </button>
               </div>
               <div class="table-responsive">
                 <table class="table align-middle">
@@ -179,7 +182,7 @@
           </div>
         </div>
         <div class="app-footer-credits">
-          <div>Desarrollador: Javier Leiba</div>
+          <div>Information and Communication Technology - ICT</div>
           <div>
             © <span class="year-now">2026</span> OIM Costa Rica. Todos los
             derechos reservados.
@@ -367,6 +370,49 @@
             </button>
             <button type="button" id="confirm-modal-ok" class="btn btn-danger">
               Sí, continuar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="reservar-modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Reservar escritorio</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="reservar-user" class="form-label">Reservar a nombre de</label>
+              <select id="reservar-user" class="form-select" required>
+                <option value="">Seleccionar usuario...</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="reservar-desk" class="form-label">Escritorio</label>
+              <select id="reservar-desk" class="form-select" required>
+                <option value="">Seleccionar escritorio...</option>
+              </select>
+            </div>
+            <div id="reservar-msg" class="alert d-none mb-0" role="alert"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" id="btn-confirm-reservar" class="btn btn-success">
+              RESERVAR
             </button>
           </div>
         </div>
