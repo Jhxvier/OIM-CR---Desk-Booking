@@ -50,7 +50,7 @@ body {
   position: absolute;
   inset: auto 0 0 0;
   background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
-  color: #cbd5e1;
+  color: #fff;
   font-size: 13px;
   padding: 18px 0;
 }
@@ -71,7 +71,7 @@ body {
 
 .app-footer-org,
 .app-footer-credits div {
-  color: #94a3b8;
+  color: #fff;
 }
 
 @media (min-width: 768px) {

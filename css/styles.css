@@ -242,7 +242,7 @@ body {
 /* ---- footer ---- */
 .app-footer {
   background: linear-gradient(135deg, var(--azul-oscuro), var(--azul));
-  color: #cbd5e1;
+  color: #fff;
   font-size: 13px;
   padding: 18px 0;
   margin-top: 32px;
@@ -263,11 +263,11 @@ body {
 }
 
 .app-footer-org {
-  color: #94a3b8;
+  color: #fff;
 }
 
 .app-footer-credits div {
-  color: #94a3b8;
+  color: #fff;
 }
 
 @media (min-width: 768px) {
