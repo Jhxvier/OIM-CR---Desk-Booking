@@ -1,0 +1,60 @@
+.navbar {
+  background: linear-gradient(135deg, #1a3a6b, #24508f);
+}
+
+.btn-primary {
+  --bs-btn-bg: #1d4ed8;
+  --bs-btn-border-color: #1d4ed8;
+  --bs-btn-hover-bg: #1e3a8a;
+  --bs-btn-hover-border-color: #1e3a8a;
+  --bs-btn-active-bg: #1e3a8a;
+  --bs-btn-active-border-color: #1e3a8a;
+}
+
+.table tbody td {
+  vertical-align: middle;
+}
+
+.role-select:focus {
+  box-shadow: none;
+}
+
+.table-responsive {
+  min-height: 120px;
+}
+
+/* ---- footer ---- */
+.app-footer {
+  background: linear-gradient(135deg, #1a3a6b, #24508f);
+  color: #cbd5e1;
+  font-size: 13px;
+  padding: 18px 0;
+  margin-top: 32px;
+}
+
+.app-footer .container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+.app-footer-name {
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1.5px;
+}
+
+.app-footer-org,
+.app-footer-credits div {
+  color: #94a3b8;
+}
+
+@media (min-width: 768px) {
+  .app-footer .container {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}

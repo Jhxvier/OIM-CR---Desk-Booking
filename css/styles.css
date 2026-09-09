@@ -1,0 +1,310 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --azul: #1d4ed8;
+  --azul-oscuro: #1e3a8a;
+  --verde: #16a34a;
+  --rojo: #dc2626;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f1f5f9;
+}
+
+.navbar {
+  background: linear-gradient(135deg, var(--azul-oscuro), var(--azul));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* cronómetro de sesión (solo usuarios normales) */
+.idle-timer {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+.idle-timer.low {
+  color: #fff;
+  background: var(--rojo);
+  border-color: var(--rojo);
+  animation: idle-pulse 1s infinite;
+}
+
+@keyframes idle-pulse {
+  50% {
+    opacity: 0.75;
+  }
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--azul);
+  --bs-btn-border-color: var(--azul);
+  --bs-btn-hover-bg: var(--azul-oscuro);
+  --bs-btn-hover-border-color: var(--azul-oscuro);
+  --bs-btn-active-bg: var(--azul-oscuro);
+  --bs-btn-active-border-color: var(--azul-oscuro);
+  --bs-btn-disabled-bg: var(--azul);
+  --bs-btn-disabled-border-color: var(--azul);
+}
+
+/* ---- leyenda del mapa ---- */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #475569;
+  align-items: center;
+}
+
+.map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 5px;
+  border: 2px solid;
+  display: inline-block;
+}
+
+.legend-dot.available {
+  border-color: var(--verde);
+  background: #f0fdf4;
+}
+
+.legend-dot.taken {
+  border-color: var(--rojo);
+  background: #fef2f2;
+}
+
+.legend-dot.selected {
+  border-color: var(--azul);
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.3);
+}
+
+/* ---- mapa ---- */
+.map {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px;
+  background: linear-gradient(160deg, #eef4fb, #e8eef7);
+  border-radius: 12px;
+  border: 1px solid #dfe7f1;
+}
+
+.zone-block {
+  border: 1.5px solid transparent;
+  border-radius: 16px;
+  padding: 14px 18px;
+}
+
+.zone-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #64748b;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.zone-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zone-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.desk {
+  width: 78px;
+  height: 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-radius: 12px;
+  border: 3px solid var(--verde);
+  background: #f0fdf4;
+  color: #14532d;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.desk:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  z-index: 2;
+}
+
+.desk.taken {
+  border-color: var(--rojo);
+  background: #fef2f2;
+  color: #7f1d1d;
+  cursor: not-allowed;
+}
+
+.desk.selected {
+  border-color: var(--azul);
+  background: #eff6ff;
+  color: var(--azul-oscuro);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.3);
+}
+
+.desk-name {
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.1;
+}
+
+.desk-who {
+  font-size: 11px;
+  max-width: 68px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- panel del escritorio ---- */
+.panel-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--azul-oscuro);
+  margin-bottom: 6px;
+}
+
+/* ---- mis reservas ---- */
+.reservation-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.reservation-date {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.reservation-desk {
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--azul-oscuro);
+}
+
+.reservation-zona {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.empty-note {
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+  padding: 14px 10px;
+  background: #fff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+}
+
+/* ---- footer ---- */
+.app-footer {
+  background: linear-gradient(135deg, var(--azul-oscuro), var(--azul));
+  color: #cbd5e1;
+  font-size: 13px;
+  padding: 18px 0;
+  margin-top: 32px;
+}
+
+.app-footer .container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+.app-footer-name {
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1.5px;
+}
+
+.app-footer-org {
+  color: #94a3b8;
+}
+
+.app-footer-credits div {
+  color: #94a3b8;
+}
+
+@media (min-width: 768px) {
+  .app-footer .container {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+/* ---- móvil ---- */
+@media (max-width: 575.98px) {
+  .navbar .container {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .map,
+  .zone-block {
+    padding: 10px;
+  }
+
+  .desk {
+    width: 60px;
+    height: 60px;
+  }
+
+  .desk-name {
+    font-size: 13px;
+  }
+
+  .desk-who {
+    font-size: 9px;
+    max-width: 52px;
+  }
+
+  .zone-row {
+    gap: 8px;
+  }
+}

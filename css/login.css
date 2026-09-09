@@ -1,0 +1,81 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.btn-primary {
+  --bs-btn-bg: #1d4ed8;
+  --bs-btn-border-color: #1d4ed8;
+  --bs-btn-hover-bg: #1e3a8a;
+  --bs-btn-hover-border-color: #1e3a8a;
+  --bs-btn-active-bg: #1e3a8a;
+  --bs-btn-active-border-color: #1e3a8a;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.login-logo {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.logo-text {
+  color: #1e3a8a;
+  letter-spacing: 3px;
+}
+
+#otp {
+  letter-spacing: 8px;
+  font-size: 1.35rem;
+}
+
+/* ---- footer ---- */
+.app-footer {
+  position: absolute;
+  inset: auto 0 0 0;
+  background: rgba(10, 20, 45, 0.45);
+  color: #cbd5e1;
+  font-size: 12.5px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+
+.app-footer-name {
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1.5px;
+}
+
+.app-footer-org,
+.app-footer-credits div {
+  color: #cbd5e1;
+}
+
+@media (min-width: 768px) {
+  .app-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    padding: 14px 28px;
+  }
+}

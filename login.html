@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desk Booking - Acceso</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100 py-4">
+  <main class="login-card">
+    <img src="css/img/icon.png" alt="OIM Costa Rica" class="login-logo">
+    <h1 class="h3 fw-bold logo-text">DESK BOOKING</h1>
+    <p class="text-secondary mb-1">OIM Costa Rica</p>
+    <p class="small text-secondary mb-4">Sistema de reserva de escritorios de oficina</p>
+
+    <form id="email-form" autocomplete="off" novalidate>
+      <label for="email" class="form-label small fw-semibold text-secondary">Email</label>
+      <input type="email" id="email" class="form-control form-control-lg" placeholder="tu@empresa.com" required autofocus>
+      <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">CONTINUAR</button>
+      <div id="email-msg" class="alert alert-danger mt-3 mb-0 d-none" role="alert"></div>
+    </form>
+
+    <form id="otp-form" class="d-none" autocomplete="off" novalidate>
+      <label for="otp" class="form-label small fw-semibold text-secondary">Código de acceso</label>
+      <input type="text" id="otp" class="form-control form-control-lg text-center" inputmode="numeric" maxlength="8" placeholder="········" required>
+      <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">ENTRAR</button>
+      <button type="button" id="back-btn" class="btn btn-link w-100 mt-1 link-secondary">← Volver</button>
+      <div id="otp-msg" class="alert alert-danger mt-3 mb-0 d-none" role="alert"></div>
+    </form>
+
+    <div id="loading-msg" class="alert alert-info mt-3 mb-0 d-none" role="alert"></div>
+  </main>
+
+  <footer class="app-footer app-footer-absolute">
+    <div class="app-footer-brand">
+      <div class="app-footer-name">DESK BOOKING</div>
+      <div class="app-footer-org">
+        Organización Internacional para las Migraciones · OIM Costa Rica
+      </div>
+    </div>
+    <div class="app-footer-credits">
+      <div>Desarrollador: Javier Leiba</div>
+      <div>
+        © <span class="year-now">2026</span> OIM Costa Rica. Todos los derechos
+        reservados.
+      </div>
+    </div>
+    <div>
+      Sistema de reserva de escritorios de oficina — intranet OIM Costa Rica
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script>document.querySelectorAll('.year-now').forEach((el) => (el.textContent = new Date().getFullYear()));</script>
+</body>
+</html>

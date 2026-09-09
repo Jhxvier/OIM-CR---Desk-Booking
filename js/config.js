@@ -1,0 +1,2 @@
+const SUPABASE_URL = 'https://hfucnpvmqexemnikkmil.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmdWNucHZtcWV4ZW1uaWtrbWlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5MTk3ODcsImV4cCI6MjEwNDQ5NTc4N30.2cAcSAL1-aS61tX18WImSRHo2xp-FIzxEf5SaqB__y8';
