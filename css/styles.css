@@ -73,6 +73,11 @@ body {
 }
 
 /* ---- mapa ---- */
+.map-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .map {
   display: flex;
   flex-direction: column;
@@ -258,6 +263,29 @@ body {
     row-gap: 6px;
   }
 
+  .navbar-brand {
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+  }
+
+  .navbar .btn {
+    padding: 0.5rem 0.85rem;
+    min-height: 38px;
+  }
+
+  .date-bar {
+    align-items: stretch;
+  }
+
+  .date-bar .form-control {
+    flex: 1 1 100%;
+  }
+
+  .date-bar #date-status {
+    width: 100%;
+    text-align: left;
+  }
+
   .map,
   .zone-block {
     padding: 10px;
@@ -279,5 +307,24 @@ body {
 
   .zone-row {
     gap: 8px;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .navbar-brand {
+    font-size: 0.85rem;
+  }
+
+  .desk {
+    width: 52px;
+    height: 52px;
+  }
+
+  .desk-name {
+    font-size: 12px;
+  }
+
+  .desk-who {
+    max-width: 46px;
   }
 }
