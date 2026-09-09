@@ -6,6 +6,7 @@
   const adminReservasBody = $('admin-reservas-body');
   const adminDesksBody = $('admin-desks-body');
   const adminUsersBody = $('admin-users-body');
+  const userRolFilter = $('user-rol-filter');
 
   const deskModal = $('desk-modal');
   const userModal = $('user-modal');
@@ -93,6 +94,7 @@
     $('btn-save-desk').addEventListener('click', saveDesk);
     $('btn-add-user').addEventListener('click', () => openUserModal());
     $('btn-save-user').addEventListener('click', saveUser);
+    userRolFilter.addEventListener('change', renderUsers);
 
     deskModalInstance = new bootstrap.Modal(deskModal);
     userModalInstance = new bootstrap.Modal(userModal);
@@ -250,12 +252,14 @@
 
   function renderUsers() {
     adminUsersBody.innerHTML = '';
-    if (!allUsers.length) {
+    const filtro = userRolFilter.value;
+    const users = filtro === 'todos' ? allUsers : allUsers.filter((u) => u.rol === filtro);
+    if (!users.length) {
       adminUsersBody.innerHTML =
         '<tr><td colspan="5" class="text-center text-secondary py-4">No hay usuarios autorizados.</td></tr>';
       return;
     }
-    for (const u of allUsers) {
+    for (const u of users) {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="fw-semibold">${u.nombre || '—'}</td>
@@ -282,6 +286,8 @@
           .eq('email', sel.dataset.role);
         if (error) return showToast('Error: ' + error.message, false);
         showToast(`Rol actualizado a ${sel.value}.`);
+        await loadUsers();
+        renderUsers();
       });
     });
     adminUsersBody.querySelectorAll('[data-utoggle]').forEach((btn) =>

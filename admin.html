@@ -149,9 +149,16 @@
                 class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2"
               >
                 <h2 class="h6 mb-0">Usuarios autorizados</h2>
-                <button class="btn btn-primary btn-sm" id="btn-add-user">
-                  + AÑADIR USUARIO
-                </button>
+                <div class="d-flex align-items-center gap-2">
+                  <select id="user-rol-filter" class="form-select form-select-sm" style="width: auto" aria-label="Filtrar por rol">
+                    <option value="todos">Todos</option>
+                    <option value="admin">Solo admins</option>
+                    <option value="user">Solo usuarios</option>
+                  </select>
+                  <button class="btn btn-primary btn-sm" id="btn-add-user">
+                    + AÑADIR USUARIO
+                  </button>
+                </div>
               </div>
               <div class="table-responsive">
                 <table class="table align-middle">
