@@ -19,33 +19,6 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-/* cronómetro de sesión (solo usuarios normales) */
-.idle-timer {
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 4px 12px;
-  border-radius: 999px;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.5px;
-}
-
-.idle-timer.low {
-  color: #fff;
-  background: var(--rojo);
-  border-color: var(--rojo);
-  animation: idle-pulse 1s infinite;
-}
-
-@keyframes idle-pulse {
-  50% {
-    opacity: 0.75;
-  }
-}
-
 .btn-primary {
   --bs-btn-bg: var(--azul);
   --bs-btn-border-color: var(--azul);

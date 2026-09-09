@@ -2,47 +2,122 @@
   box-sizing: border-box;
 }
 
+html,
 body {
-  background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
-  margin: 0;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  height: 100%;
 }
 
-.btn-primary {
+body {
+  background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+  background-attachment: fixed;
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  position: relative;
+  padding-bottom: 70px;
+}
+
+/* ---- tarjeta de login ---- */
+.login-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 40px 36px 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 24px 50px rgba(7, 20, 60, 0.38);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* ---- marca ---- */
+.login-logo {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+.company-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f2a5f;
+  letter-spacing: 0.5px;
+  margin-top: 16px;
+}
+
+.company-sub {
+  font-size: 12.5px;
+  color: #64748b;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+
+.app-badge {
+  display: inline-block;
+  margin-top: 14px;
+  background: #eef3fe;
+  border: 1px solid #d5e0f8;
+  color: #1e3a8a;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.login-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 10px;
+}
+
+/* ---- formularios (alineados a la izquierda, más profesionales) ---- */
+.login-card form {
+  text-align: left;
+}
+
+.login-card .form-label {
+  color: #334155;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.login-card .form-control {
+  border: 1.5px solid #dbe1ee;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 15px;
+  box-shadow: none;
+}
+
+.login-card .form-control:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.login-card .btn-primary {
   --bs-btn-bg: #1d4ed8;
   --bs-btn-border-color: #1d4ed8;
   --bs-btn-hover-bg: #1e3a8a;
   --bs-btn-hover-border-color: #1e3a8a;
   --bs-btn-active-bg: #1e3a8a;
   --bs-btn-active-border-color: #1e3a8a;
-}
-
-.login-card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 40px 36px;
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
-  text-align: center;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
 }
 
-.login-logo {
-  width: 84px;
-  height: 84px;
-  object-fit: contain;
-  border-radius: 16px;
-  margin-bottom: 16px;
-}
-
-.logo-text {
-  color: #1e3a8a;
-  letter-spacing: 3px;
+.login-card .btn-link {
+  font-size: 13px;
 }
 
 #otp {
   letter-spacing: 8px;
   font-size: 1.35rem;
+  text-align: center;
 }
 
 /* ---- footer (igual al del index, anclado abajo) ---- */
@@ -53,6 +128,7 @@ body {
   color: #fff;
   font-size: 13px;
   padding: 18px 0;
+  z-index: 1;
 }
 
 .app-footer .container {

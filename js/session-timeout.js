@@ -2,7 +2,6 @@
   const TIMEOUT_MS = 5 * 60 * 1000;
   const WARNING_MS = 60 * 1000;
   const CHECK_INTERVAL = 10 * 1000;
-  const UI_TICK = 1000;
 
   let isAdmin = false;
   let lastActive = Date.now();
@@ -10,32 +9,19 @@
   let expired = false;
   let modal = null;
   let countdownInterval = null;
-  let pill = null;
-  let uiInterval = null;
 
   const secondsLeft = () =>
     Math.max(0, Math.ceil((TIMEOUT_MS - (Date.now() - lastActive)) / 1000));
-
-  const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
   const stopCountdown = () => {
     clearInterval(countdownInterval);
     countdownInterval = null;
   };
 
-  function updatePill() {
-    if (!pill) return;
-    const s = secondsLeft();
-    pill.textContent = `Sesión: ${fmt(s)}`;
-    pill.classList.toggle('low', s <= 60);
-    pill.title = s <= 60 ? 'La ventana se cerrará pronto si no hay actividad' : 'La sesión se cierra tras 5 minutos sin actividad';
-  }
-
   const reset = () => {
     lastActive = Date.now();
     warned = false;
     stopCountdown();
-    updatePill();
     if (modal) modal.hide();
   };
 
@@ -79,15 +65,6 @@
   }
 
   function buildUi() {
-    const container = document.querySelector('.navbar .container');
-    if (container) {
-      pill = document.createElement('span');
-      pill.className = 'idle-timer ms-2';
-      container.appendChild(pill);
-      updatePill();
-      uiInterval = setInterval(updatePill, UI_TICK);
-    }
-
     const div = document.createElement('div');
     div.className = 'modal fade';
     div.id = 'idle-modal';
@@ -139,7 +116,6 @@
         if (!warned && idle > TIMEOUT_MS - WARNING_MS) {
           startCountdown();
           showWarning();
-          updatePill();
         } else if (idle <= TIMEOUT_MS - WARNING_MS && warned) {
           warned = false;
           stopCountdown();
