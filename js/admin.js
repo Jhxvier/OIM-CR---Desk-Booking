@@ -418,13 +418,43 @@
     renderUsers();
   }
 
+  function cargarDesksDisponibles(fecha) {
+    const deskSelect = $('reservar-desk');
+    deskSelect.innerHTML = '<option value="">Cargando escritorios...</option>';
+
+    supabaseClient
+      .from('reservas')
+      .select('desk_id')
+      .eq('fecha', fecha)
+      .then(({ data }) => {
+        const takenDeskIds = new Set();
+        if (data) data.forEach((r) => takenDeskIds.add(r.desk_id));
+        const libres = allDesks.filter((d) => d.activo && !takenDeskIds.has(d.id));
+        if (!libres.length) {
+          deskSelect.innerHTML = '<option value="">No hay escritorios disponibles</option>';
+          return;
+        }
+        deskSelect.innerHTML = '<option value="">Seleccionar escritorio...</option>';
+        libres.forEach((d) => {
+          const opt = document.createElement('option');
+          opt.value = d.id;
+          opt.textContent = `${d.nombre} (${d.zona})`;
+          deskSelect.appendChild(opt);
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        deskSelect.innerHTML = '<option value="">Error al cargar escritorios</option>';
+      });
+  }
+
   function openReservarModal() {
     const userSelect = $('reservar-user');
     const deskSelect = $('reservar-desk');
+    const fechaInput = $('reservar-fecha');
     const msg = $('reservar-msg');
 
     userSelect.innerHTML = '<option value="">Seleccionar usuario...</option>';
-    deskSelect.innerHTML = '<option value="">Seleccionar escritorio...</option>';
     msg.className = 'alert d-none mb-0';
 
     allUsers.filter((u) => u.activo).forEach((u) => {
@@ -434,39 +464,31 @@
       userSelect.appendChild(opt);
     });
 
-    const fecha = adminDate.value;
-    const takenDeskIds = new Set();
-    supabaseClient
-      .from('reservas')
-      .select('desk_id')
-      .eq('fecha', fecha)
-      .then(({ data }) => {
-        if (data) data.forEach((r) => takenDeskIds.add(r.desk_id));
-        allDesks
-          .filter((d) => d.activo && !takenDeskIds.has(d.id))
-          .forEach((d) => {
-            const opt = document.createElement('option');
-            opt.value = d.id;
-            opt.textContent = `${d.nombre} (${d.zona})`;
-            deskSelect.appendChild(opt);
-          });
-      });
+    fechaInput.min = toISODate(new Date());
+    fechaInput.value = adminDate.value;
+    cargarDesksDisponibles(fechaInput.value);
 
     reservarModalInstance.show();
   }
 
+  $('reservar-fecha').addEventListener('change', (e) => {
+    cargarDesksDisponibles(e.target.value);
+  });
+
   async function confirmReserva() {
     const userSelect = $('reservar-user');
     const deskSelect = $('reservar-desk');
+    const fechaInput = $('reservar-fecha');
     const msg = $('reservar-msg');
     const btn = $('btn-confirm-reservar');
 
     const email = userSelect.value;
     const deskId = deskSelect.value;
+    const fecha = fechaInput.value;
 
-    if (!email || !deskId) {
+    if (!email || !deskId || !fecha) {
       msg.className = 'alert alert-danger mb-0';
-      msg.textContent = 'Selecciona un usuario y un escritorio.';
+      msg.textContent = 'Selecciona el usuario, la fecha y el escritorio.';
       return;
     }
 
@@ -484,7 +506,7 @@
     const userAuthId = sessionData.user.id;
 
     const { error } = await supabaseClient.from('reservas').insert({
-      fecha: adminDate.value,
+      fecha,
       desk_id: deskId,
       user_id: userAuthId,
       user_email: email,
