@@ -45,17 +45,20 @@ body {
   font-size: 1.35rem;
 }
 
-/* ---- footer ---- */
+/* ---- footer (igual al del index, anclado abajo) ---- */
 .app-footer {
   position: absolute;
   inset: auto 0 0 0;
-  background: rgba(10, 20, 45, 0.45);
+  background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
   color: #cbd5e1;
-  font-size: 12.5px;
-  padding: 14px 16px;
+  font-size: 13px;
+  padding: 18px 0;
+}
+
+.app-footer .container {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   align-items: center;
   text-align: center;
 }
@@ -68,14 +71,13 @@ body {
 
 .app-footer-org,
 .app-footer-credits div {
-  color: #cbd5e1;
+  color: #94a3b8;
 }
 
 @media (min-width: 768px) {
-  .app-footer {
+  .app-footer .container {
     flex-direction: row;
     justify-content: space-between;
     text-align: left;
-    padding: 14px 28px;
   }
 }
