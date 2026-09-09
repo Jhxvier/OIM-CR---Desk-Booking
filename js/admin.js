@@ -441,9 +441,9 @@
       .select('desk_id')
       .eq('fecha', fecha)
       .then(({ data }) => {
-        if (data) data.forEach((r) => takenDeskIds.delete(r.desk_id));
+        if (data) data.forEach((r) => takenDeskIds.add(r.desk_id));
         allDesks
-          .filter((d) => d.activo && takenDeskIds.has(d.id))
+          .filter((d) => d.activo && !takenDeskIds.has(d.id))
           .forEach((d) => {
             const opt = document.createElement('option');
             opt.value = d.id;
