@@ -14,6 +14,8 @@ body {
   font-family: 'Segoe UI', system-ui, sans-serif;
   position: relative;
   padding-bottom: 70px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* ---- tarjeta de login ---- */
