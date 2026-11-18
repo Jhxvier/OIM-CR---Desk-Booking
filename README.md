@@ -40,7 +40,7 @@ Sistema interno de reserva de escritorios de oficina para la **Organización Int
   - Filtros por usuario, estado, fecha, mes y semana.
   - Exportación a **Excel** y **PDF** respetando los filtros, e incluyendo "Realizado por".
   - Si la tabla está vacía, se reconstruye el historial desde `reservas`.
-- **Escritorios y usuarios**: agregar/editar/eliminar/activar escritorios; permitir o quitar acceso con rol `user` o `admin`.
+- **Escritorios y usuarios**: agregar/editar/eliminar/activar escritorios (Grupo y Posición controlan el orden). En Usuarios hay búsqueda por nombre o email, filtro por rol y edición de nombre, email, rol y estado.
 
 ### Seguridad
 

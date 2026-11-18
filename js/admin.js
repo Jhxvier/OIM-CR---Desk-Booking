@@ -7,6 +7,7 @@
   const adminDesksBody = $('admin-desks-body');
   const adminUsersBody = $('admin-users-body');
   const userRolFilter = $('user-rol-filter');
+  const userSearch = $('user-search');
   const auditBody = $('audit-body');
   const auditStatus = $('audit-status');
   const auditUsuario = $('audit-usuario');
@@ -44,6 +45,13 @@
     const p = (n) => String(n).padStart(2, '0');
     return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
   };
+
+  // Ignora mayúsculas y acentos al buscar usuarios.
+  const normText = (s) =>
+    String(s || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
 
   // Fecha de hoy en Costa Rica (misma zona que usa el trigger de Supabase).
   function hoyCRAdmin() {
@@ -219,6 +227,7 @@
     $('btn-add-user').addEventListener('click', () => openUserModal());
     $('btn-save-user').addEventListener('click', saveUser);
     userRolFilter.addEventListener('change', renderUsers);
+    userSearch.addEventListener('input', renderUsers);
 
     deskModalInstance = new bootstrap.Modal(deskModal);
     userModalInstance = new bootstrap.Modal(userModal);
@@ -428,10 +437,19 @@
   function renderUsers() {
     adminUsersBody.innerHTML = '';
     const filtro = userRolFilter.value;
-    const users = filtro === 'todos' ? allUsers : allUsers.filter((u) => u.rol === filtro);
+    const q = normText(userSearch.value.trim());
+    const users = allUsers.filter((u) => {
+      const porRol = filtro === 'todos' || u.rol === filtro;
+      const porTexto = !q || normText(u.nombre).includes(q) || normText(u.email).includes(q);
+      return porRol && porTexto;
+    });
     if (!users.length) {
       adminUsersBody.innerHTML =
-        '<tr><td colspan="5" class="text-center text-secondary py-4">No hay usuarios autorizados.</td></tr>';
+        `<tr><td colspan="5" class="text-center text-secondary py-4">${
+          q || filtro !== 'todos'
+            ? 'No se encontraron usuarios con esos filtros.'
+            : 'No hay usuarios autorizados.'
+        }</td></tr>`;
       return;
     }
     for (const u of users) {
@@ -447,11 +465,16 @@
         </td>
         <td>${badge(u.activo ? 'ok' : 'no', u.activo ? 'Activo' : 'Inactivo')}</td>
         <td class="text-end">
+          <button class="btn btn-outline-primary btn-sm me-1" data-uedit="${u.email}">Editar</button>
           <button class="btn btn-outline-secondary btn-sm me-1" data-utoggle="${u.email}">${u.activo ? 'Desactivar' : 'Activar'}</button>
           <button class="btn btn-outline-danger btn-sm" data-udel="${u.email}">Eliminar</button>
         </td>`;
       adminUsersBody.appendChild(tr);
     }
+
+    adminUsersBody.querySelectorAll('[data-uedit]').forEach((btn) =>
+      btn.addEventListener('click', () => openUserModal(userByEmail(btn.dataset.uedit)))
+    );
 
     adminUsersBody.querySelectorAll('.role-select').forEach((sel) => {
       sel.addEventListener('change', async () => {
@@ -1027,35 +1050,70 @@
     await renderReservations();
   }
 
-  function openUserModal() {
-    $('user-email').value = '';
-    $('user-nombre').value = '';
-    $('user-rol').value = 'user';
-    $('user-activo').checked = true;
+  function openUserModal(user = null) {
+    $('user-modal-title').textContent = user ? 'Editar usuario' : 'Añadir usuario';
+    $('user-email-original').value = user ? user.email : '';
+    $('user-email').value = user ? user.email : '';
+    $('user-nombre').value = user ? user.nombre || '' : '';
+    $('user-rol').value = user ? user.rol : 'user';
+    $('user-activo').checked = user ? user.activo : true;
+    $('user-email-help').textContent = user
+      ? 'El usuario deberá entrar con el correo nuevo. Si ya tenía sesión abierta, se cerrará. Su historial de reservas conservará el correo anterior.'
+      : 'Debe coincidir exactamente con el correo institucional.';
     userModalInstance.show();
   }
 
   async function saveUser() {
+    const original = $('user-email-original').value;
     const email = $('user-email').value.trim().toLowerCase();
     const nombre = $('user-nombre').value.trim();
     const rol = $('user-rol').value;
     const activo = $('user-activo').checked;
+    const cambiaEmail = Boolean(original) && email !== original;
 
     if (!email || !nombre) {
       showToast('Completa los campos obligatorios.', false);
       return;
     }
-    userModalInstance.hide();
-    const { error } = await supabaseClient
-      .from('allowed_users')
-      .insert({ email, nombre, rol, activo });
-    if (error) {
-      showToast('Error: ' + error.message, false);
+    if (allUsers.some((u) => u.email === email && u.email !== original)) {
+      showToast('Ya existe un usuario con ese email.', false);
       return;
     }
-    showToast('Usuario añadido.');
+    if (cambiaEmail && original === currentUserEmail) {
+      showToast('No puedes cambiar tu propio correo desde aquí.', false);
+      return;
+    }
+
+    userModalInstance.hide();
+
+    if (original) {
+      const { error } = await supabaseClient
+        .from('allowed_users')
+        .update(cambiaEmail ? { email, nombre, rol, activo } : { nombre, rol, activo })
+        .eq('email', original);
+      if (error) {
+        showToast('Error: ' + error.message, false);
+        return;
+      }
+      showToast(
+        cambiaEmail
+          ? 'Usuario actualizado. Debe entrar con el correo nuevo.'
+          : 'Usuario actualizado.'
+      );
+    } else {
+      const { error } = await supabaseClient
+        .from('allowed_users')
+        .insert({ email, nombre, rol, activo });
+      if (error) {
+        showToast('Error: ' + error.message, false);
+        return;
+      }
+      showToast('Usuario añadido.');
+    }
+
     await loadUsers();
     renderUsers();
+    if (cambiaEmail) await renderReservations();
   }
 
   async function cargarDesksDisponibles(fecha) {

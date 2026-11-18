@@ -160,8 +160,8 @@
                     <tr>
                       <th>Nombre</th>
                       <th>Zona</th>
-                      <th>Fila</th>
-                      <th>Orden</th>
+                      <th>Grupo</th>
+                      <th>Posición</th>
                       <th>Estado</th>
                       <th>Acciones</th>
                     </tr>
@@ -180,7 +180,15 @@
                 class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2"
               >
                 <h2 class="h6 mb-0">Usuarios autorizados</h2>
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <input
+                    type="search"
+                    id="user-search"
+                    class="form-control form-control-sm"
+                    style="min-width: 220px"
+                    placeholder="Buscar por nombre o email…"
+                    aria-label="Buscar usuarios"
+                  />
                   <select id="user-rol-filter" class="form-select form-select-sm" style="width: auto" aria-label="Filtrar por rol">
                     <option value="todos">Todos</option>
                     <option value="admin">Solo admins</option>
@@ -391,24 +399,30 @@
             </div>
             <div class="row g-3 mb-3">
               <div class="col-6">
-                <label for="desk-posy" class="form-label">Fila</label>
+                <label for="desk-posy" class="form-label">Grupo</label>
                 <input
                   type="number"
                   id="desk-posy"
                   class="form-control"
                   required
                 />
-                <div class="form-text">Número de fila donde aparece</div>
+                <div class="form-text">
+                  Copia el número de los escritorios de su zona. Ej.: 100 o 220
+                  en Área común.
+                </div>
               </div>
               <div class="col-6">
-                <label for="desk-posx" class="form-label">Orden</label>
+                <label for="desk-posx" class="form-label">Posición</label>
                 <input
                   type="number"
                   id="desk-posx"
                   class="form-control"
                   required
                 />
-                <div class="form-text">Posición dentro de la fila</div>
+                <div class="form-text">
+                  Para agregarlo al final, pon el último número + 100. El
+                  formulario ya lo sugiere solo.
+                </div>
               </div>
             </div>
             <div class="form-check">
@@ -443,7 +457,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Añadir usuario</h5>
+            <h5 class="modal-title" id="user-modal-title">Añadir usuario</h5>
             <button
               type="button"
               class="btn-close"
@@ -453,6 +467,7 @@
           </div>
           <div class="modal-body">
             <div class="mb-3">
+              <input type="hidden" id="user-email-original" />
               <label for="user-email" class="form-label">Email</label>
               <input
                 type="email"
@@ -461,6 +476,9 @@
                 placeholder="nombre@iom.int"
                 required
               />
+              <div class="form-text" id="user-email-help">
+                Debe coincidir exactamente con el correo institucional.
+              </div>
             </div>
             <div class="mb-3">
               <label for="user-nombre" class="form-label">Nombre</label>
