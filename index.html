@@ -10,12 +10,13 @@
     />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
-  <body>
+  <body class="pending-auth">
     <nav class="navbar">
       <div class="container">
-        <span class="navbar-brand fw-bold text-white"
-          >OIM CR - DESK BOOKING</span
-        >
+        <span class="navbar-brand fw-bold text-white">
+          <img src="css/img/icon.png" alt="OIM" class="navbar-logo" />
+          OIM CR - DESK BOOKING
+        </span>
         <div class="d-flex align-items-center flex-wrap gap-3">
           <a
             href="admin.html"
@@ -23,7 +24,10 @@
             class="d-none text-warning fw-semibold text-decoration-none"
             >Administración</a
           >
-          <span id="user-name" class="text-white fw-semibold"></span>
+          <div class="user-chip">
+            <span id="user-avatar" class="user-avatar"></span>
+            <span id="user-name" class="text-white fw-semibold"></span>
+          </div>
           <button id="logout-btn" class="btn btn-outline-light btn-sm">
             Salir
           </button>
@@ -36,9 +40,10 @@
         <div class="card-body">
           <h1 class="h5 fw-bold mb-1">Reserva de escritorios</h1>
           <p class="mb-0 text-secondary">
-            Selecciona una fecha, elige un escritorio libre en el plano de la
-            oficina y confirma tu reserva en pocos pasos. Tu reserva quedará
-            disponible bajo "Mis reservas".
+            Elige el mes y la semana, selecciona uno o varios días y escritorios
+            en la cuadrícula y confirma tus reservas de una sola vez. Puedes
+            consultar semanas anteriores para auditoría (solo lectura). Tus
+            reservas quedarán disponibles bajo "Mis reservas".
           </p>
         </div>
       </div>
@@ -53,45 +58,87 @@
             style="width: 34px; height: 34px; object-fit: contain"
           />
           <label
-            for="date-input"
+            for="month-input"
             class="form-label mb-0 fw-semibold text-secondary"
-            >Fecha</label
+            >Mes</label
           >
           <input
-            type="date"
-            id="date-input"
+            type="month"
+            id="month-input"
             class="form-control"
             style="width: auto"
           />
+          <label
+            for="week-select"
+            class="form-label mb-0 fw-semibold text-secondary"
+            >Semana</label
+          >
+          <select
+            id="week-select"
+            class="form-select"
+            style="width: auto"
+          ></select>
           <span id="date-status" class="text-danger small ms-auto"></span>
+          <div id="month-hint" class="small text-secondary w-100"></div>
         </div>
       </div>
 
       <div class="row g-3">
-        <div class="col-12 col-xl-8">
+        <div class="col-12">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
-              <div class="map-legend d-flex flex-wrap gap-3">
-                <span><i class="legend-dot available"></i>Disponible</span>
-                <span><i class="legend-dot taken"></i>Ocupado</span>
-                <span><i class="legend-dot selected"></i>Seleccionado</span>
+              <div
+                class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"
+              >
+                <div class="map-legend d-flex flex-wrap gap-3">
+                  <span><i class="legend-dot available"></i>Disponible</span>
+                  <span><i class="legend-dot taken"></i>Ocupado</span>
+                  <span><i class="legend-dot selected"></i>Seleccionado</span>
+                  <span
+                    ><i class="legend-dot past"></i>Fecha pasada (solo
+                    lectura)</span
+                  >
+                  <span
+                    ><i class="legend-dot holiday"></i>Feriado obligatorio
+                    (bloqueado)</span
+                  >
+                  <span
+                    ><i class="legend-dot floating"></i>Día flotante
+                    (se puede reservar)</span
+                  >
+                </div>
+                <div class="d-flex gap-2">
+                  <button
+                    id="btn-clear"
+                    class="btn btn-outline-secondary btn-sm"
+                    type="button"
+                  >
+                    LIMPIAR
+                  </button>
+                  <button
+                    id="btn-reserve"
+                    class="btn btn-success btn-sm"
+                    type="button"
+                  >
+                    RESERVAR
+                  </button>
+                </div>
               </div>
-              <div class="map-scroll">
-                <div id="map" class="map"></div>
+              <div class="grid-scroll">
+                <div id="booking-grid" class="booking-grid"></div>
               </div>
+              <div
+                id="panel-msg"
+                class="alert mt-3 mb-0 d-none"
+                role="alert"
+              ></div>
             </div>
           </div>
         </div>
 
-        <div class="col-12 col-xl-4">
-          <div class="card border-0 shadow-sm">
-            <div class="card-body">
-              <div id="desk-panel" class="desk-panel"></div>
-            </div>
-          </div>
-
-          <h2 class="fs-6 fw-bold text-uppercase text-secondary mt-4 mb-2">
-            Mis reservas
+        <div class="col-12">
+          <h2 class="fs-6 fw-bold text-uppercase text-secondary mt-2 mb-2">
+            Mis reservas <span id="my-reservas-rango" class="fw-normal text-capitalize"></span>
           </h2>
           <div id="my-reservations"></div>
         </div>
@@ -101,7 +148,10 @@
     <footer class="app-footer">
       <div class="container">
         <div class="app-footer-brand">
-          <div class="app-footer-name">OIM CR - DESK BOOKING</div>
+          <div class="footer-brand">
+            <img src="css/img/icon.png" alt="OIM" class="footer-logo" />
+            <div class="app-footer-name">OIM CR - DESK BOOKING</div>
+          </div>
           <div class="app-footer-org">
             Organización Internacional para las Migraciones · OIM Costa Rica
           </div>
@@ -175,7 +225,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
     <script src="js/supabase.js"></script>
-    <script src="js/desks.js"></script>
     <script src="js/app.js"></script>
     <script src="js/session-timeout.js"></script>
     <script>

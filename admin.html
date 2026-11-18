@@ -10,16 +10,22 @@
     />
     <link rel="stylesheet" href="css/admin.css" />
   </head>
-  <body>
+  <body class="pending-auth">
     <nav class="navbar">
       <div class="container">
-        <span class="navbar-brand fw-bold text-white"
-          >DESK BOOKING · ADMIN</span
-        >
+        <span class="navbar-brand fw-bold text-white">
+          <img src="css/img/icon.png" alt="OIM" class="navbar-logo" />
+          OIM CR · DESK BOOKING
+          <span class="admin-badge">ADMIN</span>
+        </span>
         <div class="d-flex align-items-center flex-wrap gap-3">
           <a href="index.html" class="text-white-50 text-decoration-none small"
             >← Volver a la app</a
           >
+          <div class="user-chip">
+            <span id="admin-user-avatar" class="user-avatar"></span>
+            <span id="admin-user-name" class="text-white fw-semibold small"></span>
+          </div>
           <button id="logout-btn" class="btn btn-outline-light btn-sm">
             Salir
           </button>
@@ -67,6 +73,30 @@
             Usuarios
           </button>
         </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="tab-dias-btn"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-dias"
+            type="button"
+            role="tab"
+          >
+            Días especiales
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="tab-auditoria-btn"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-auditoria"
+            type="button"
+            role="tab"
+          >
+            Auditoría
+          </button>
+        </li>
       </ul>
 
       <div class="tab-content">
@@ -102,6 +132,7 @@
                       <th>Zona</th>
                       <th>Estado</th>
                       <th>Reservado por</th>
+                      <th>Realizada por</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -177,13 +208,137 @@
             </div>
           </div>
         </div>
+
+        <div class="tab-pane fade" id="tab-dias" role="tabpanel">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h2 class="h6 mb-1">Días feriados y flotantes</h2>
+              <p class="text-secondary small mb-3">
+                Los feriados obligatorios se muestran bloqueados en la cuadrícula y no permiten reservar.
+                Los días flotantes se muestran en amarillo y sí se pueden reservar.
+              </p>
+
+              <div class="row g-2 align-items-end mb-3">
+                <div class="col-md-3">
+                  <label for="dia-fecha" class="form-label small mb-1 fw-semibold text-secondary">Fecha</label>
+                  <input type="date" id="dia-fecha" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-3">
+                  <label for="dia-tipo" class="form-label small mb-1 fw-semibold text-secondary">Tipo</label>
+                  <select id="dia-tipo" class="form-select form-select-sm">
+                    <option value="obligatorio">Obligatorio (bloqueado)</option>
+                    <option value="flotante">Flotante (amarillo)</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="dia-desc" class="form-label small mb-1 fw-semibold text-secondary">Descripción</label>
+                  <input type="text" id="dia-desc" class="form-control form-control-sm" placeholder="Ej. Año Nuevo" />
+                </div>
+                <div class="col-md-2 d-grid">
+                  <button class="btn btn-primary btn-sm" id="btn-add-dia" type="button">AGREGAR</button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="dia-lista" class="form-label small mb-1 fw-semibold text-secondary">
+                  Carga masiva — una por línea: <code>YYYY-MM-DD | obligatorio|flotante | Descripción</code>
+                </label>
+                <textarea id="dia-lista" class="form-control form-control-sm" rows="4"
+                  placeholder="2028-01-01 | obligatorio | Año Nuevo"></textarea>
+                <button class="btn btn-outline-primary btn-sm mt-2" id="btn-add-dias-lista" type="button">
+                  CARGAR LISTA
+                </button>
+              </div>
+
+              <div id="dias-status" class="small text-secondary mb-2"></div>
+              <div class="table-responsive">
+                <table class="table align-middle">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Tipo</th>
+                      <th>Descripción</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-dias-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-auditoria" role="tabpanel">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex flex-wrap align-items-end gap-2 mb-3">
+                <div>
+                  <label for="audit-usuario" class="form-label small mb-1 fw-semibold text-secondary">Usuario</label>
+                  <select id="audit-usuario" class="form-select form-select-sm">
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="audit-accion" class="form-label small mb-1 fw-semibold text-secondary">Estado</label>
+                  <select id="audit-accion" class="form-select form-select-sm">
+                    <option value="">Todos</option>
+                    <option value="ACTIVA">Reservas activas</option>
+                    <option value="CANCELADA">Canceladas</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="audit-fecha" class="form-label small mb-1 fw-semibold text-secondary">Fecha de la reserva</label>
+                  <input type="date" id="audit-fecha" class="form-control form-control-sm" />
+                </div>
+                <div>
+                  <label for="audit-mes" class="form-label small mb-1 fw-semibold text-secondary">Mes / Semana</label>
+                  <div class="d-flex gap-1">
+                    <input type="month" id="audit-mes" class="form-control form-control-sm" style="width:auto" />
+                    <select id="audit-semana" class="form-select form-select-sm" style="width:auto">
+                      <option value="">Todas</option>
+                      <option value="1">Semana 1</option>
+                      <option value="2">Semana 2</option>
+                      <option value="3">Semana 3</option>
+                      <option value="4">Semana 4</option>
+                      <option value="5">Semana 5</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="ms-auto d-flex gap-2">
+                  <button id="btn-audit-excel" class="btn btn-outline-success btn-sm" type="button">↓ Excel</button>
+                  <button id="btn-audit-pdf" class="btn btn-outline-danger btn-sm" type="button">↓ PDF</button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table align-middle table-sm">
+                  <thead>
+                    <tr>
+                      <th>Fecha reservada</th>
+                      <th>Estado</th>
+                      <th>Usuario</th>
+                      <th>Realizado por</th>
+                      <th>Escritorio</th>
+                      <th>Zona</th>
+                      <th>Historial</th>
+                    </tr>
+                  </thead>
+                  <tbody id="audit-body"></tbody>
+                </table>
+              </div>
+              <div id="audit-status" class="small text-secondary mt-2"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
     <footer class="app-footer">
       <div class="container">
         <div class="app-footer-brand">
-          <div class="app-footer-name">OIM CR - DESK BOOKING</div>
+          <div class="footer-brand">
+            <img src="css/img/icon.png" alt="OIM" class="footer-logo" />
+            <div class="app-footer-name">OIM CR - DESK BOOKING</div>
+          </div>
           <div class="app-footer-org">
             Organización Internacional para las Migraciones · OIM Costa Rica
           </div>
@@ -402,15 +557,28 @@
                 <option value="">Seleccionar usuario...</option>
               </select>
             </div>
-            <div class="mb-3">
-              <label for="reservar-fecha" class="form-label">Fecha</label>
-              <input type="date" id="reservar-fecha" class="form-control" required />
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label for="reservar-mes" class="form-label">Mes</label>
+                <input type="month" id="reservar-mes" class="form-control" />
+                <div id="reservar-mes-hint" class="small text-secondary mt-1"></div>
+              </div>
+              <div class="col-6">
+                <label for="reservar-semana" class="form-label">Semana</label>
+                <select id="reservar-semana" class="form-select"></select>
+              </div>
             </div>
             <div class="mb-3">
-              <label for="reservar-desk" class="form-label">Escritorio</label>
+              <label class="form-label">Día</label>
+              <div id="reservar-dias" class="d-flex flex-wrap gap-2"></div>
+              <div id="reservar-dia-msg" class="small text-secondary mt-1"></div>
+            </div>
+            <div class="mb-3">
+              <label for="reservar-desk" class="form-label">Escritorio disponible</label>
               <select id="reservar-desk" class="form-select" required>
-                <option value="">Seleccionar escritorio...</option>
+                <option value="">Selecciona primero un día</option>
               </select>
+              <div id="reservar-desk-msg" class="small text-secondary mt-1"></div>
             </div>
             <div id="reservar-msg" class="alert d-none mb-0" role="alert"></div>
           </div>
@@ -452,6 +620,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/admin.js"></script>

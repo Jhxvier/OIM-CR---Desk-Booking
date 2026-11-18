@@ -17,6 +17,12 @@
   const show = (elm) => elm.classList.remove('d-none');
   const hide = (elm) => elm.classList.add('d-none');
 
+  // Si ya hay una sesión activa, entrar directo a la app (el login es la puerta)
+  (async () => {
+    const { data } = await supabaseClient.auth.getSession();
+    if (data.session) window.location.replace('index.html');
+  })();
+
   emailForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     hide(emailMsg);

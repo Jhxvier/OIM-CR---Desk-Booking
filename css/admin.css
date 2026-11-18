@@ -1,5 +1,68 @@
+/* Evita ver el panel antes de validar que el usuario es admin */
+body.pending-auth {
+  visibility: hidden;
+}
+
 .navbar {
   background: linear-gradient(135deg, #1a3a6b, #24508f);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.22);
+}
+
+.navbar .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.navbar-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 7px;
+  padding: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-badge {
+  font-size: 10px;
+  letter-spacing: 1px;
+  background: #facc15;
+  color: #1a3a6b;
+  border-radius: 4px;
+  padding: 2px 6px;
+  vertical-align: middle;
+}
+
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+}
+
+.user-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  color: #1a3a6b;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.user-chip #admin-user-name {
+  white-space: nowrap;
 }
 
 .btn-primary {
@@ -26,29 +89,110 @@
 /* ---- footer ---- */
 .app-footer {
   background: linear-gradient(135deg, #1a3a6b, #24508f);
+  border-top: 3px solid rgba(255, 255, 255, 0.28);
   color: #fff;
   font-size: 13px;
-  padding: 18px 0;
+  padding: 22px 0 18px;
   margin-top: 32px;
 }
 
 .app-footer .container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
   text-align: center;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 7px;
+  padding: 3px;
 }
 
 .app-footer-name {
   font-weight: 800;
   color: #fff;
   letter-spacing: 1.5px;
+  line-height: 1.1;
 }
 
 .app-footer-org,
 .app-footer-credits div {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+@media (min-width: 768px) {
+  .app-footer .container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    gap: 24px;
+  }
+
+  .app-footer-brand,
+  .app-footer-org,
+  .app-footer-credits {
+    padding-right: 24px;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .app-footer-credits {
+    padding-right: 0;
+    border-right: 0;
+    text-align: right;
+  }
+}
+
+/* ---- selector de días en el modal de reserva por admin ---- */
+.admin-day-btn {
+  min-width: 62px;
+  padding: 6px 4px;
+  border: 2px solid #16a34a;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #14532d;
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.15;
+}
+.admin-day-btn small {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+}
+.admin-day-btn.floating {
+  border-color: #eab308;
+  background: #fef9c3;
+  color: #854d0e;
+}
+.admin-day-btn.holiday {
+  border-color: #b91c1c;
+  background: #fee2e2;
+  color: #991b1b;
+  cursor: not-allowed;
+}
+.admin-day-btn.past {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+.admin-day-btn.active {
+  border-color: #1d4ed8;
+  background: #eff6ff;
+  color: #1e3a8a;
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.3);
 }
 
 @media (min-width: 768px) {

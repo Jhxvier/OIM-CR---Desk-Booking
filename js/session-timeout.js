@@ -1,5 +1,5 @@
 (() => {
-  const TIMEOUT_MS = 5 * 60 * 1000;
+  const TIMEOUT_MS = 10 * 60 * 1000;
   const WARNING_MS = 60 * 1000;
   const CHECK_INTERVAL = 10 * 1000;
 
@@ -77,7 +77,7 @@
             <h5 class="modal-title">Sesión inactiva</h5>
           </div>
           <div class="modal-body">
-            <p class="mb-1">Por seguridad, la sesión se cierra tras 5 minutos sin actividad.</p>
+            <p class="mb-1">Por seguridad, la sesión se cierra tras 10 minutos sin actividad.</p>
             <p id="idle-remaining" class="mb-0 fw-semibold text-danger"></p>
           </div>
           <div class="modal-footer">
@@ -95,6 +95,9 @@
     const { data } = await supabaseClient.auth.getSession();
     if (!data.session) return;
 
+    // Solo los usuarios normales tienen límite de inactividad.
+    // Los admins no se cierran automáticamente para no interrumpir
+    // la gestión del panel.
     const { data: me } = await supabaseClient
       .from('allowed_users')
       .select('rol')
@@ -103,25 +106,24 @@
       .catch(() => ({ data: null }));
 
     isAdmin = !!me && me.rol === 'admin';
+    if (isAdmin) return;
 
-    if (!isAdmin) {
-      buildUi();
+    buildUi();
 
-      setInterval(() => {
-        const idle = Date.now() - lastActive;
-        if (idle > TIMEOUT_MS) {
-          expires();
-          return;
-        }
-        if (!warned && idle > TIMEOUT_MS - WARNING_MS) {
-          startCountdown();
-          showWarning();
-        } else if (idle <= TIMEOUT_MS - WARNING_MS && warned) {
-          warned = false;
-          stopCountdown();
-        }
-      }, CHECK_INTERVAL);
-    }
+    setInterval(() => {
+      const idle = Date.now() - lastActive;
+      if (idle > TIMEOUT_MS) {
+        expires();
+        return;
+      }
+      if (!warned && idle > TIMEOUT_MS - WARNING_MS) {
+        startCountdown();
+        showWarning();
+      } else if (idle <= TIMEOUT_MS - WARNING_MS && warned) {
+        warned = false;
+        stopCountdown();
+      }
+    }, CHECK_INTERVAL);
   }
 
   init();

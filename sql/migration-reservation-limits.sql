@@ -4,8 +4,9 @@
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- 1. FUNCIÓN: Verificar límite diario de reservas por usuario
---    Admin puede reservar ilimitadamente; usuario regular solo 1 por día.
+-- 1. FUNCIÓN: Verificar límite diario de reservas
+--    Regla: 1 reserva por día POR CORREO, también cuando un admin reserva
+--    a nombre de otra persona. Distintas personas el mismo día sí pueden.
 -- ----------------------------------------------------------------------------
 create or replace function public.check_user_daily_limit()
 returns trigger
@@ -14,15 +15,13 @@ security definer
 set search_path = public
 as $$
 begin
-  if not public.is_admin() then
-    if exists (
-      select 1
-      from public.reservas
-      where user_id = auth.uid()
-        and fecha = NEW.fecha
-    ) then
-      raise exception 'Solo puedes reservar un escritorio por día.';
-    end if;
+  if exists (
+    select 1
+    from public.reservas
+    where lower(user_email) = lower(NEW.user_email)
+      and fecha = NEW.fecha
+  ) then
+    raise exception 'Solo se permite una reserva por día por persona.';
   end if;
   return NEW;
 end;
@@ -53,7 +52,7 @@ create policy reservas_insert_own_or_admin
 
 -- ============================================================================
 -- LISTO. Resumen de cambios:
---   - Usuarios regulares: máximo 1 reserva por día (validado en trigger)
---   - Admin: puede reservar ilimitadamente a nombre de cualquier usuario
+--   - Todos: máximo 1 reserva por día POR CORREO (incluso creadas por admin)
+--   - Admin: puede reservar a nombre de otros (personas distintas, mismo día)
 --   - RLS actualizado para permitir admin insertar por otros
 -- ============================================================================
